@@ -1,0 +1,29 @@
+<form id="add-to-cart-form">
+    {% csrf_token %}
+    <input type="hidden" name="quantity" value="1">
+
+    {% if product.extras.all %}
+    <h4>Додати:</h4>
+    {% for extra in product.extras.all %}
+    <label>
+        <input type="checkbox" name="extras" value="{{ extra.id }}">
+        {{ extra.name }} (+{{ extra.price }} ₴)
+    </label><br>
+    {% endfor %}
+    {% endif %}
+
+    {% if product.sauces.all %}
+    <h4>Соуси:</h4>
+    {% for sauce in product.sauces.all %}
+    <label>
+        <input type="checkbox" name="sauces" value="{{ sauce.id }}">
+        {{ sauce.name }}{% if sauce.price %} (+{{ sauce.price }} ₴){% endif %}
+    </label><br>
+    {% endfor %}
+    {% endif %}
+
+    <button id="confirm-add" data-product-id="{{ product.id }}" style="margin-top: 10px;">
+        Додати
+    </button>
+</form>
+

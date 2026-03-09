@@ -1,0 +1,12 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Замовлення{% endblock %}
+
+{% block content %}
+
+<div class="success-message">
+    <h3>Ваше замовлення щойно отримано!.</h3>
+    <p>Дякуємо за ваше замовлення, ми зв'яжемося з вами найближчим часом!</p>
+    <a href="{% url 'product_list' %}">Продовжити покупки</a>
+</div>
+{% endblock %}

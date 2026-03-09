@@ -1,0 +1,45 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Doner House 24{% endblock %}
+
+{% block content %}
+
+
+<section class="home-hero">
+    <h2>Ласкаво просимо в Nadrovax.online</h2>
+    <h4>Смачна шаурма • швидка доставка • найкраща якість</h4>
+    <h6>Замовляйте доставку або робіть передзамовлення онлайн — без черг і без дзвінків. Усе швидко та зручно.</h6>
+
+    <a href="{% url 'product_list' %}" class="hero-button" style="color: black;">
+        Перейти в меню
+    </a>
+</section>
+
+
+<section class="home-popular">
+
+    <h2>Популярні страви</h2>
+
+    <div class="product-list">
+
+        {% for product in products %}
+        <div class="product-item">
+
+            <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.photo.url }}" style="width:250px;">
+            </a>
+
+            <p>{{ product.name }}</p>
+
+            <p class="product-price">
+                {{ product.price|floatformat:2 }} ₴
+            </p>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

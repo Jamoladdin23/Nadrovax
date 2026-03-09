@@ -1,0 +1,80 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h3 class="cart-title">🛒 Ваш кошик</h3>
+
+{% if cart_items %}
+<div class="cart-container">
+    {% for item in cart_items %}
+    <div class="cart-item">
+        <div class="cart-left">
+            {% if item.product.photo %}
+            <img src="{{ item.product.photo.url }}" alt="{{ item.product.name }}">
+            {% else %}
+            <img src="{% static 'store/no-image.png' %}" alt="No image">
+            {% endif %}
+        </div>
+
+        <div class="cart-center">
+            <h3>{{ item.product.name }}</h3>
+            {% if item.extras.all %}
+            <p><strong>Додатки:</strong></p>
+            <ul>
+                {% for extra in item.extras.all %}
+                <li>{{ extra.name }} (+{{ extra.price }} ₴)</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if item.sauces.all %}
+            <p><strong>Соуси:</strong></p>
+            <ul>
+                {% for sauce in item.sauces.all %}
+                <li>{{ sauce.name }}{% if sauce.price %} (+{{ sauce.price }} ₴){% endif %}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <p>Кількість: <strong>{{ item.quantity }}</strong></p>
+            <p class="price">{{ item.get_total_price }} ₴</p>
+
+            <form action="{% url 'update_cart_item' item.id %}" method="post" class="qty-form">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                <button type="submit">оновити</button>
+            </form>
+        </div>
+
+        <div class="cart-right">
+            <a href="{% url 'remove_cart_item' item.id %}" class="delete-btn">✖</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<p class="total-price"><strong>Загальна сума:</strong> {{ total_price }} ₴</p>
+
+<button id="open-order-form" class="checkout-btn">Зробити замовлення</button>
+
+<form id="order-form" style="display:none; margin-top:20px;">
+    {% csrf_token %}
+
+    <input type="text" name="recipient_name" placeholder="Ім'я" required>
+    <input type="text" name="address" placeholder="Aдрес доставки: або Адреса відділення:" required>
+    <input type="text" name="phone_number" placeholder="Телефон: або ваш нікнейм у Telegram: @..." required>
+    <input type="text" name="comment" placeholder="Коментар, побажання, пояснення (необов'язково)">
+
+
+    <button type="submit">Підтвердження</button>
+</form>
+
+{% else %}
+<p>Але кошик порожній 😄</p>
+<button onclick="window.location.href='{% url 'product_list' %}'">
+    Повернутися до меню
+</button>
+{% endif %}
+
+{% endblock %}
